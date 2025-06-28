@@ -34,8 +34,8 @@ router.get('/overview', async (req, res) => {
     const avgCompletionResult = (await runQuery(`
       SELECT AVG(
         CASE 
-          WHEN status = 'Completed' AND start_date IS NOT NULL AND end_date IS NOT NULL
-          THEN (julianday(end_date) - julianday(start_date))
+          WHEN status = 'completed' AND start_date IS NOT NULL AND completion_date IS NOT NULL
+          THEN (julianday(completion_date) - julianday(start_date))
           ELSE NULL
         END
       ) as avg_completion_days
@@ -49,7 +49,7 @@ router.get('/overview', async (req, res) => {
     });
 
     // Ensure all expected statuses are present
-    const expectedStatuses = ['Draft', 'Released', 'In Progress', 'Completed', 'Cancelled'];
+    const expectedStatuses = ['draft', 'planned', 'in_progress', 'completed', 'cancelled'];
     expectedStatuses.forEach(status => {
       if (!statusCounts[status]) {
         statusCounts[status] = 0;
@@ -57,11 +57,15 @@ router.get('/overview', async (req, res) => {
     });
 
     const stats = {
-      totalOrders: totalOrdersResult.total_orders || 0,
-      statusCounts,
-      totalPlannedCost: plannedCostResult.total_planned_cost || 0,
-      totalActualCost: actualCostResult.total_actual_cost || 0,
-      avgCompletionTime: avgCompletionResult.avg_completion_days || 0
+      total_orders: totalOrdersResult.total_orders || 0,
+      draft_count: statusCounts['draft'] || 0,
+      planned_count: statusCounts['planned'] || 0,
+      in_progress_count: statusCounts['in_progress'] || 0,
+      completed_count: statusCounts['completed'] || 0,
+      cancelled_count: statusCounts['cancelled'] || 0,
+      total_planned_cost: plannedCostResult.total_planned_cost || 0,
+      total_actual_cost: actualCostResult.total_actual_cost || 0,
+      avg_completion_time_days: avgCompletionResult.avg_completion_days || 0
     };
 
     res.json(stats);
