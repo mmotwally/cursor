@@ -1,5 +1,5 @@
 import express from 'express';
-import db from '../../database/connection.js';
+import { runQuery } from '../../database/connection.js';
 
 const router = express.Router();
 
@@ -7,31 +7,31 @@ const router = express.Router();
 router.get('/overview', async (req, res) => {
   try {
     // Get total count of production orders
-    const totalOrdersResult = await db.get(`
+    const totalOrdersResult = (await runQuery(`
       SELECT COUNT(*) as total_orders FROM production_orders
-    `);
+    `))[0];
 
     // Get counts by status
-    const statusCountsResult = await db.all(`
+    const statusCountsResult = await runQuery(`
       SELECT status, COUNT(*) as count 
       FROM production_orders 
       GROUP BY status
     `);
 
     // Get total planned cost
-    const plannedCostResult = await db.get(`
+    const plannedCostResult = (await runQuery(`
       SELECT COALESCE(SUM(planned_cost), 0) as total_planned_cost 
       FROM production_orders
-    `);
+    `))[0];
 
     // Get total actual cost
-    const actualCostResult = await db.get(`
+    const actualCostResult = (await runQuery(`
       SELECT COALESCE(SUM(actual_cost), 0) as total_actual_cost 
       FROM production_orders
-    `);
+    `))[0];
 
     // Get average completion time for completed orders
-    const avgCompletionResult = await db.get(`
+    const avgCompletionResult = (await runQuery(`
       SELECT AVG(
         CASE 
           WHEN status = 'Completed' AND start_date IS NOT NULL AND end_date IS NOT NULL
@@ -40,7 +40,7 @@ router.get('/overview', async (req, res) => {
         END
       ) as avg_completion_days
       FROM production_orders
-    `);
+    `))[0];
 
     // Format status counts into an object
     const statusCounts = {};
