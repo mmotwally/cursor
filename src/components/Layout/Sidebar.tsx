@@ -31,7 +31,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { name: 'Production', href: '/production', icon: Factory },
     { name: 'Reports & Analytics', href: '/reports', icon: BarChart2 },
     { name: 'Master Data', href: '/master-data', icon: Settings },
-    { name: 'Parametric Cabinet', href: '/parametric-cabinet', icon: FileText },
     ...(user?.role === 'admin' ? [{ name: 'User Management', href: '/users', icon: Users }] : []),
     { name: 'Settings', href: '/settings', icon: Database },
   ];

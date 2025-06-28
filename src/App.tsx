@@ -13,7 +13,6 @@ import ReportDashboard from './components/Reports/ReportDashboard';
 import SettingsPage from './components/Settings/SettingsPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
-import ParametricCabinet from './pages/ParametricCabinet';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -42,7 +41,6 @@ function AppContent() {
             <Route path="/purchase-orders" element={<PurchaseOrders />} />
             <Route path="/production" element={<Production />} />
             <Route path="/master-data" element={<MasterDataManagement />} />
-            <Route path="/parametric-cabinet" element={<ParametricCabinet />} />
             <Route path="/users" element={<UserManagement />} />
             <Route path="/reports" element={<ReportDashboard />} />
             <Route path="/settings" element={<SettingsPage />} />
