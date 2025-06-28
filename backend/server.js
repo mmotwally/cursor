@@ -24,6 +24,7 @@ import productionOrderRoutes from './routes/productionOrders.js';
 import backupRoutes from './routes/backup.js';
 import imagesRoutes from './routes/images.js';
 import cabinetRoutes from './routes/cabinet/index.js';
+import userPreferencesRoutes from './routes/userPreferences.js';
 import rateLimit from 'express-rate-limit';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -89,6 +90,7 @@ app.use('/api/production-orders', productionOrderRoutes);
 app.use('/api/backup', backupRoutes);
 app.use('/api/images', imagesRoutes);
 app.use('/api/cabinet', cabinetRoutes);
+app.use('/api/user-preferences', userPreferencesRoutes);
 
 // Serve static files - Always serve in this environment
 app.use(express.static(path.join(__dirname, '../dist')));

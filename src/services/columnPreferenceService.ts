@@ -40,7 +40,7 @@ export const columnPreferenceService = {
     // Store in localStorage as a backup
     localStorage.setItem(`column_prefs_${pageId}`, JSON.stringify(columns));
     
-    const response = await fetch(`${API_BASE}/inventory/column-preferences`, {
+    const response = await fetch(`${API_BASE}/user-preferences`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify({ 
@@ -55,7 +55,7 @@ export const columnPreferenceService = {
   async getColumnPreferences(pageId: string) {
     try {
       console.log('Fetching column preferences for', pageId);
-      const response = await fetch(`${API_BASE}/inventory/column-preferences?preference_type=${pageId}`, {
+      const response = await fetch(`${API_BASE}/user-preferences?preference_type=${pageId}`, {
         headers: getAuthHeaders(),
       });
 
@@ -65,18 +65,14 @@ export const columnPreferenceService = {
       if (result && result.columns) {
         try {
           // Try to parse the columns field
-          const parsedColumns = JSON.parse(result.columns);
-          console.log('Successfully parsed column preferences:', parsedColumns);
-          return parsedColumns;
+          return JSON.parse(result.columns);
         } catch (e) {
           console.error('Failed to parse column preferences from server:', e);
           // Fall back to localStorage if server parsing fails
           const localPrefs = localStorage.getItem(`column_prefs_${pageId}`);
           if (localPrefs) {
             try {
-              const parsedLocalPrefs = JSON.parse(localPrefs);
-              console.log('Using localStorage fallback for preferences:', parsedLocalPrefs);
-              return parsedLocalPrefs;
+              return JSON.parse(localPrefs);
             } catch (e) {
               console.error('Failed to parse localStorage preferences:', e);
             }
@@ -88,9 +84,7 @@ export const columnPreferenceService = {
         const localPrefs = localStorage.getItem(`column_prefs_${pageId}`);
         if (localPrefs) {
           try {
-            const parsedLocalPrefs = JSON.parse(localPrefs);
-            console.log('Using localStorage fallback for preferences:', parsedLocalPrefs);
-            return parsedLocalPrefs;
+            return JSON.parse(localPrefs);
           } catch (e) {
             console.error('Failed to parse localStorage preferences:', e);
           }
@@ -104,9 +98,7 @@ export const columnPreferenceService = {
       const localPrefs = localStorage.getItem(`column_prefs_${pageId}`);
       if (localPrefs) {
         try {
-          const parsedLocalPrefs = JSON.parse(localPrefs);
-          console.log('Using localStorage fallback for preferences after server error:', parsedLocalPrefs);
-          return parsedLocalPrefs;
+          return JSON.parse(localPrefs);
         } catch (e) {
           console.error('Failed to parse localStorage preferences:', e);
         }
